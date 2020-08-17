@@ -1,5 +1,4 @@
 %define debug_package %{nil}
-
 %define patchlevel 0678
 %define baseversion 8.2
 %define vimdir vim82
@@ -11,25 +10,21 @@
 %define with_hunspell 1
 %define with_ruby 0
 %define with_lua 0
+%define python8 python3.8
 
-%define python8		python3.8
+Name:          vim8
+Version:       %{baseversion}.%{patchlevel}
+Release:       1%{?dist}
+Summary:       The VIM editor
+Group:         Applications/Editors
+License:       Vim
+URL:           http://www.vim.org/
+Source0:       https://github.com/vim/vim/archive/v%{baseversion}.%{patchlevel}.tar.gz
 
-Name:		   vim8
-Version:	 %{baseversion}.%{patchlevel}
-Release:	 1%{?dist}
-Summary:	 The VIM editor
-
-Group:		 Applications/Editors
-License:	 Vim
-URL:		   http://www.vim.org/
-Source0:	 https://github.com/vim/vim/archive/v%{baseversion}.%{patchlevel}.tar.gz
-
-Patch3004: vim-7.0-rclocation.patch
-
-Buildroot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+Patch3004:     vim-7.0-rclocation.patch
+Buildroot:     %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires: ncurses-devel
-
 %if %{?rhel}%{!?rhel:0} == 7
 BuildRequires: rh-python38-python-devel
 %endif
@@ -37,8 +32,8 @@ BuildRequires: rh-python38-python-devel
 %if %{?rhel}%{!?rhel:0} == 8
 BuildRequires: python38-devel
 %endif
-Requires:	perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
-Requires:	vim-common
+Requires: perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
+Requires: vim-common
 
 %description
 VIM (VIsual editor iMproved) is an updated and improved version of the
@@ -66,21 +61,21 @@ rm -fr %{build}
 cd src
 autoconf
 
-sed -e "s+VIMRCLOC	= \$(VIMLOC)+VIMRCLOC	= /etc+" Makefile > Makefile.tmp
+sed -e "s+VIMRCLOC  = \$(VIMLOC)+VIMRCLOC = /etc+" Makefile > Makefile.tmp
 mv -f Makefile.tmp Makefile
 
 %if %{?rhel}%{!?rhel:0} == 7
-%define python3		python3.8m
-%define python3conf	/opt/rh/rh-python38/root/usr/lib64/python3.8/config-3.8m
-%define python3path	/opt/rh/rh-python38/root/usr/include/%{python3}
-%define python3bin	/opt/rh/rh-python38/root/usr/bin/%{python3}
+%define python3     python3.8m
+%define python3conf /opt/rh/rh-python38/root/usr/lib64/python3.8/config-3.8m
+%define python3path /opt/rh/rh-python38/root/usr/include/%{python3}
+%define python3bin  /opt/rh/rh-python38/root/usr/bin/%{python3}
 %endif
 
 %if %{?rhel}%{!?rhel:0} == 8
-%define python3		python3.8m
-%define python3conf	/usr/lib64/python3.8/config-3.8m
-%define python3path	/usr/include/%{python3}
-%define python3bin	/usr/bin/%{python3}
+%define python3     python3.8m
+%define python3conf /usr/lib64/python3.8/config-3.8m
+%define python3path /usr/include/%{python3}
+%define python3bin  /usr/bin/%{python3}
 %endif
 
 export CFLAGS="%{optflags} -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -D_FORTIFY_SOURCE=2 -I%{python3path}"
